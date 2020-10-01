@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+  stock-quote-manager:
+    image: igorrafa/stock-quote-manager
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8081:8081
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/bootdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORDD=root
+    networks:
+      - mynetwork
+
+  stock-manager:
+    image: igorrafa/stock-manager
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/bootdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORDD=root
+    networks:
+      - mynetwork
+
+  mysql:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bootdb
+    ports:
+      - 3306:3306
+      - 33060:3306
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
